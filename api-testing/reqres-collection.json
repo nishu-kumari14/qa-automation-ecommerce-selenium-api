@@ -1,0 +1,107 @@
+{
+  "info": {
+    "name": "ReqRes API Testing Collection",
+    "description": "Collection for GET users and POST create user validations.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET Users",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/users?page=2",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () {",
+              "  pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Response time is under 2000ms', function () {",
+              "  pm.expect(pm.response.responseTime).to.be.below(2000);",
+              "});",
+              "",
+              "pm.test('Response has expected users payload', function () {",
+              "  const responseBodyJson = pm.response.json();",
+              "  pm.expect(responseBodyJson).to.have.property('data');",
+              "  pm.expect(responseBodyJson.data).to.be.an('array').that.is.not.empty;",
+              "  pm.expect(responseBodyJson).to.have.property('page', 2);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "POST Create User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"hemanth\",\n  \"job\": \"qa engineer\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/users",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "users"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 201', function () {",
+              "  pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test('Response contains created user fields', function () {",
+              "  const responseBodyJson = pm.response.json();",
+              "  pm.expect(responseBodyJson).to.have.property('name', 'hemanth');",
+              "  pm.expect(responseBodyJson).to.have.property('job', 'qa engineer');",
+              "  pm.expect(responseBodyJson).to.have.property('id');",
+              "  pm.expect(responseBodyJson).to.have.property('createdAt');",
+              "});",
+              "",
+              "pm.test('Response time is under 2000ms', function () {",
+              "  pm.expect(pm.response.responseTime).to.be.below(2000);",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
