@@ -7,6 +7,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
+from automation.pages.inventory_page import InventoryPage
 from automation.pages.login_page import LoginPage
 
 
@@ -62,8 +63,10 @@ def driver(request):
 @pytest.fixture(scope="function")
 def logged_in_driver(driver, credentials):
     login_page = LoginPage(driver)
+    inventory_page = InventoryPage(driver)
     login_page.load()
     login_page.login(credentials["standard_user"], credentials["password"])
+    inventory_page.wait_until_loaded()
     return driver
 
 
