@@ -26,6 +26,14 @@ class InventoryPage(BasePage):
         self.wait_for_url_contains("cart.html")
 
     def logout(self):
-        self.click_js(self.MENU_BUTTON)
-        self.click_js(self.LOGOUT_LINK)
-        self.is_visible(self.LOGIN_USERNAME_INPUT)
+        for _ in range(3):
+            self.click_js(self.MENU_BUTTON)
+            self.is_visible(self.LOGOUT_LINK)
+            self.click_js(self.LOGOUT_LINK)
+
+            if self.is_visible(self.LOGIN_USERNAME_INPUT):
+                return
+
+        raise AssertionError(
+            f"Logout did not navigate to login page. Current URL: {self.driver.current_url}"
+        )
