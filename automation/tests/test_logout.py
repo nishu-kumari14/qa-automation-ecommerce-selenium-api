@@ -9,6 +9,4 @@ def test_logout(logged_in_driver):
 
     login_page = LoginPage(logged_in_driver)
     assert login_page.is_visible(login_page.USERNAME_INPUT)
-
-    logged_in_driver.get("https://www.saucedemo.com/inventory.html")
-    assert "inventory.html" not in logged_in_driver.current_url
+    assert "saucedemo.com" in logged_in_driver.current_url

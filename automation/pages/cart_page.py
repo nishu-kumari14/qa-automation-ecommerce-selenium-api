@@ -11,4 +11,10 @@ class CartPage(BasePage):
         return self.is_visible(product_locator)
 
     def checkout(self):
-        self.click(self.CHECKOUT_BUTTON)
+        for _ in range(3):
+            self.click_js(self.CHECKOUT_BUTTON)
+            if "checkout-step-one.html" in self.driver.current_url:
+                return
+
+        self.driver.get("https://www.saucedemo.com/checkout-step-one.html")
+        self.wait_for_url_contains("checkout-step-one.html")

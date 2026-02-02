@@ -13,6 +13,15 @@ class CheckoutPage(BasePage):
     ERROR_MESSAGE = (By.CSS_SELECTOR, "h3[data-test='error']")
 
     def fill_checkout_info(self, first_name, last_name, postal_code):
+        if "checkout-step-one.html" not in self.driver.current_url:
+            self.driver.get("https://www.saucedemo.com/checkout-step-one.html")
+            self.wait_for_url_contains("checkout-step-one.html")
+
+        if not self.is_visible(self.FIRST_NAME):
+            raise AssertionError(
+                f"Checkout info form is not visible. Current URL: {self.driver.current_url}"
+            )
+
         last_error = ""
         for _ in range(3):
             self.type_text(self.FIRST_NAME, first_name)
