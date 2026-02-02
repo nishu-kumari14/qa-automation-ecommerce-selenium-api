@@ -44,6 +44,19 @@ class BasePage:
             value,
         )
 
+    def set_react_input_value(self, locator, value):
+        element = self.wait.until(EC.visibility_of_element_located(locator))
+        self.driver.execute_script(
+            "const el = arguments[0];"
+            "const val = arguments[1];"
+            "const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;"
+            "setter.call(el, val);"
+            "el.dispatchEvent(new Event('input', { bubbles: true }));"
+            "el.dispatchEvent(new Event('change', { bubbles: true }));",
+            element,
+            value,
+        )
+
     def is_visible(self, locator):
         try:
             self.wait.until(EC.visibility_of_element_located(locator))
