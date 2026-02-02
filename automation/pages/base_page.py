@@ -30,6 +30,20 @@ class BasePage:
         element = self.wait.until(EC.visibility_of_element_located(locator))
         return element.text
 
+    def get_attribute(self, locator, attribute_name):
+        element = self.wait.until(EC.visibility_of_element_located(locator))
+        return element.get_attribute(attribute_name)
+
+    def set_value_js(self, locator, value):
+        element = self.wait.until(EC.visibility_of_element_located(locator))
+        self.driver.execute_script(
+            "arguments[0].value = arguments[1];"
+            "arguments[0].dispatchEvent(new Event('input', { bubbles: true }));"
+            "arguments[0].dispatchEvent(new Event('change', { bubbles: true }));",
+            element,
+            value,
+        )
+
     def is_visible(self, locator):
         try:
             self.wait.until(EC.visibility_of_element_located(locator))
